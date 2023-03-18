@@ -1,72 +1,28 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 public class movimentacao : MonoBehaviour
 {
-    public Rigidbody2D rb;
-    public int moveSpeed;
-    public float jumpForce;
-    private float direction;
 
-
-    private Vector3 facingRight;
-    private Vector3 facingLeft;
-
-    public Animator animator; 
-
-    public bool inGround;
-    public Transform groundDetect;
-    public LayerMask isGround;
-    public int doubleJump;
-
+     public float speed = 5f; // Velocidade de movimento do personagem
+    // Start is called before the first frame update
     void Start()
     {
-        facingRight = transform.localScale;
-        facingLeft = transform.localScale;
-        facingLeft.x = facingLeft.x * -1;
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-
+        
     }
 
-    
+    // Update is called once per frame
     void Update()
-    {   
+    {
+        // Obtém os valores dos eixos horizontal e vertical
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
 
-        inGround = Physics2D.OverlapCircle(groundDetect.position, 0.2f, isGround);
+        // Calcula o vetor de movimento com base nos valores dos eixos
+        Vector3 movement = new Vector3(horizontalInput, verticalInput, 0f) * speed * Time.deltaTime;
 
-        direction = Input.GetAxis("Horizontal");
-
-        if(direction > 0)
-        {
-            //Olhando direita
-            transform.localScale = facingRight;
-        }
-        else if (direction < 0)
-        {
-            transform.localScale = facingLeft;
-        }
-
-        rb.velocity = new Vector2(direction * moveSpeed, rb.velocity.y);
-
-        if(Input.GetAxis("Horizontal") != 0)
-        {
-            animator.SetBool("Walk", true);
-        }
-        else
-        {
-            animator.SetBool("Walk", false);
-        }
-
-        if(Input.GetButtonDown("Jump") && inGround == true)
-        {
-            rb.velocity = Vector2.up * jumpForce;
-        }
-        if(Input.GetButtonDown("Jump") && inGround == false && doubleJump > 0)
-        {
-            rb.velocity = Vector2.up * jumpForce;
-            doubleJump--;
-        }
-        if(inGround == true)
-        {
-            doubleJump = 1;
-        }
+        // Move o personagem na direção calculada
+        transform.position += movement;
     }
 }
