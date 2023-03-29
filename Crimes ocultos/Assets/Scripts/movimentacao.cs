@@ -5,7 +5,7 @@ using UnityEngine;
 public class movimentacao : MonoBehaviour
 {
 
-     public float speed = 5f; // Velocidade de movimento do personagem
+     public float speed = 100f; // Velocidade de movimento do personagem
     // Start is called before the first frame update
     void Start()
     {
